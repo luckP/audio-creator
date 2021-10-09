@@ -14,6 +14,6 @@ This small python script allows you to create mp3 audios from text documents. Ma
 
     python3 create_mp3.py '?'
 
-## Finally, you can change the reading speed, by default it is set to 150. As shown in the example:
+## Finally, you can change the reading speed by default it is set to 150. As shown in the example:
 
     python3 create_mp3.py ./test-audio Alex 200
