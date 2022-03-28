@@ -51,6 +51,13 @@ def insert_info():
     
     return album, artist_name
 
+def get_img_path(path, file_list):
+    for file in file_list:
+        if(file.endswith('.png')):
+            return path + '/' + file
+    return ''
+    
+
 def main(argv):
     check(argv)
     album, artist_name = insert_info()
@@ -59,9 +66,13 @@ def main(argv):
     speed = get_speed(argv)
 
     file_list = get_dir_file_names(path)
-
+    img_path = get_img_path(path, file_list)
+    
     count = 0
     for file in file_list:
+        if file.endswith('.png'):
+            continue
+        
         file_full_path = path+'/'+file
         file_aiff = path + '/' + file + ".aiff"
         file_mp3 = path + '/' + file + ".mp3"
@@ -73,18 +84,25 @@ def main(argv):
         os.system("lame -m m " + file_aiff + " " + file_mp3)
         os.system("rm " + file_aiff)
         
+        # ADD ALBUM NAME AND ARTIST NAME
         audio = eyed3.load(file_mp3)
         audio.initTag()
         audio.tag.artist = artist_name
         audio.tag.album = album
         audio.tag.album_artist = artist_name
         audio.tag.title = album
-        "ISO-8859-1"
+        
+        # ADD LYRICS
         # with open(file_full_path, 'r', encoding="utf8") as file:
         with open(file_full_path, 'r', encoding="ISO-8859-1") as file:
             lyrics = file.read()
-            
         audio.tag.lyrics.set(str(lyrics))
+        
+        # ADD ART IMAGE
+        if img_path!='':
+            with open(img_path, 'rb',) as cover_art:
+                audio.tag.images.set(3, cover_art.read(), "image/jpeg")
+            
         audio.tag.save()
 
         count += 1
