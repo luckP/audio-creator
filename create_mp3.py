@@ -1,6 +1,6 @@
 import sys
 import os
-
+import eyed3
 
 def get_dir_file_names(path):
     file_list = os.listdir(path)
@@ -12,7 +12,6 @@ def get_path(argv):
         return './'
     else:
         return argv[1]
-
 
 def get_voice(argv):
     vs = ['Alex' 'Alice', 'Alva', 'Amelie', 'Anna', 'Carmit',
@@ -31,13 +30,11 @@ def get_voice(argv):
         else:
             return 'Alex'
 
-
 def get_speed(argv):
     if len(argv) <= 3:
         return '175'
     else:
         return argv[3]
-
 
 def check(argv):
     if len(argv) == 1:
@@ -45,10 +42,18 @@ def check(argv):
     if argv[1] == '?':
         os.system("say -v '?'")
         exit()
-
+        
+def insert_info():
+    print('Enter album:')
+    album = input()
+    print('Enter artist name:')
+    artist_name = input()
+    
+    return album, artist_name
 
 def main(argv):
     check(argv)
+    album, artist_name = insert_info()
     path = get_path(argv)
     voice = get_voice(argv)
     speed = get_speed(argv)
@@ -67,6 +72,20 @@ def main(argv):
                   " -o " + file_aiff + "  < " + file_full_path)
         os.system("lame -m m " + file_aiff + " " + file_mp3)
         os.system("rm " + file_aiff)
+        
+        audio = eyed3.load(file_mp3)
+        audio.initTag()
+        audio.tag.artist = artist_name
+        audio.tag.album = album
+        audio.tag.album_artist = artist_name
+        audio.tag.title = album
+        "ISO-8859-1"
+        # with open(file_full_path, 'r', encoding="utf8") as file:
+        with open(file_full_path, 'r', encoding="ISO-8859-1") as file:
+            lyrics = file.read()
+            
+        audio.tag.lyrics.set(str(lyrics))
+        audio.tag.save()
 
         count += 1
 
