@@ -44,9 +44,9 @@ def check(argv):
         exit()
         
 def insert_info():
-    print('Enter album:')
+    print('Enter Title:')
     album = input()
-    print('Enter artist name:')
+    print('Enter Artist Name:')
     artist_name = input()
     
     return album, artist_name
@@ -90,18 +90,21 @@ def main(argv):
         audio.tag.artist = artist_name
         audio.tag.album = album
         audio.tag.album_artist = artist_name
-        audio.tag.title = album
+        audio.tag.title = album + ' - ' + file
         
         # ADD LYRICS
         # with open(file_full_path, 'r', encoding="utf8") as file:
-        with open(file_full_path, 'r', encoding="ISO-8859-1") as file:
-            lyrics = file.read()
+
+        with open(file_full_path, 'rb') as f:
+            lyrics = f.read().decode(errors='replace')
+
+
         audio.tag.lyrics.set(str(lyrics))
         
         # ADD ART IMAGE
         if img_path!='':
             with open(img_path, 'rb',) as cover_art:
-                audio.tag.images.set(3, cover_art.read(), "image/jpeg")
+                audio.tag.images.set(3, cover_art.read(), "image/png")
             
         audio.tag.save()
 
