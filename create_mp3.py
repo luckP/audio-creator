@@ -68,6 +68,15 @@ def main(argv):
     file_list = get_dir_file_names(path)
     img_path = get_img_path(path, file_list)
     
+    # READ ART IMAGE
+    if img_path!='':
+        print('would you like to generate mp4 file? yes(y)/no(N)')
+        generate_mp4 = input()
+        generate_mp4 = generate_mp4 == 'y'
+        
+        with open(img_path, 'rb',) as cover_art:
+            artwork = cover_art.read()
+    
     count = 0
     for file in file_list:
         if file.endswith('.png'):
@@ -103,8 +112,12 @@ def main(argv):
         
         # ADD ART IMAGE
         if img_path!='':
-            with open(img_path, 'rb',) as cover_art:
-                audio.tag.images.set(3, cover_art.read(), "image/png")
+            audio.tag.images.set(3, artwork, "image/png")
+        
+        # GENERATE MP4 FILE
+        if generate_mp4:
+            os.system("ffmpeg -loop 1 -i "+ img_path +" -i "+ file_mp3 +" -c:v libx264 -tune stillimage -c:a aac -b:a 192k -pix_fmt yuv420p -shortest "+path + '/' + file + ".mp4")
+
             
         audio.tag.save()
 
