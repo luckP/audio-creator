@@ -1,1 +1,72 @@
+# macOS
 .DS_Store
+.AppleDouble
+.LSOverride
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+*.cover
+.hypothesis/
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Audio files (generated outputs)
+*.aiff
+*.mp3
+*.wav
+*.m4a
+test-audio*/
+output/
+generated/
+
+# Logs
+*.log
+logs/
+
+# Environment variables
+.env
+.env.local
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Documentation builds
+docs/_build/
+docs/.doctrees/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Alembic
+alembic/versions/*.pyc

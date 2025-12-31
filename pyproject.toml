@@ -1,0 +1,53 @@
+[tool.pylint.main]
+# Use multiple processes to speed up Pylint
+jobs = 0
+
+# Pickle collected data for later comparisons
+persistent = true
+
+# Files or directories to be skipped
+ignore-patterns = []
+
+[tool.pylint.messages_control]
+# Disable warnings globally
+disable = [
+    "too-few-public-methods",
+]
+
+[tool.pylint.basic]
+# Good variable names which should always be accepted
+good-names = ["i", "j", "k", "ex", "Run", "_", "db", "id"]
+
+[tool.pylint.design]
+# Maximum number of arguments for function / method
+max-args = 7
+
+# Maximum number of attributes for a class
+max-attributes = 10
+
+[tool.pylint.format]
+# Maximum number of characters on a single line
+max-line-length = 100
+
+# Maximum number of lines in a module
+max-module-lines = 1000
+
+[tool.pylint.similarities]
+# Minimum lines number of a similarity
+min-similarity-lines = 4
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "-v",
+    "--strict-markers",
+    "--tb=short",
+]
+markers = [
+    "unit: Unit tests",
+    "integration: Integration tests",
+    "slow: Slow running tests",
+]

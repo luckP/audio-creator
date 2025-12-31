@@ -15,10 +15,10 @@ def get_path(argv):
 
 def get_voice(argv):
     vs = ['Alex' 'Alice', 'Alva', 'Amelie', 'Anna', 'Carmit',
-          'Damayanti', 'Daniel', 'Diego', 'Ellen', 'Felipe', 'Fiona',
+          'Damayanti', 'Daniel', 'Diego', 'Ellen', 'Evan', 'Felipe', 'Fiona',
           'Fred', 'Ioana', 'Joana', 'Jorge', 'Juan', 'Kanya', 'Karen',
           'Kyoko', 'Laura', 'Lekha', 'Luca', 'Luciana', 'Maged', 'Mariska', 'Mei-',
-          'Melina', 'Milena', 'Moira', 'Monica', 'Nora', 'Paulina', 'Rishi',
+          'Melina', 'Milena', 'Moira', 'Monica', 'Nathan', 'Nora', 'Paulina', 'Rishi',
           'Samantha', 'Sara', 'Satu', 'Sin-ji', 'Tessa', 'Thomas', 'Ting-',
           'Veena', 'Victoria', 'Xander', 'Yelda', 'Yuna', 'Yuri', 'Zosia', 'Zuzana']
 
@@ -32,9 +32,9 @@ def get_voice(argv):
 
 def get_speed(argv):
     if len(argv) <= 3:
-        return '175'
+        return 1
     else:
-        return argv[3]
+        return float(argv[3])
 
 def check(argv):
     if len(argv) == 1:
@@ -45,9 +45,13 @@ def check(argv):
         
 def insert_info():
     print('Enter Title:')
-    album = input()
+    # album = input()
+    album = 'A Discovery of Witches'
+    print(album)
     print('Enter Artist Name:')
-    artist_name = input()
+    artist_name = 'Deborah Harkness'
+    print(artist_name)
+    # artist_name = input()
     
     return album, artist_name
 
@@ -56,7 +60,20 @@ def get_img_path(path, file_list):
         if(file.endswith('.png')):
             return path + '/' + file
     return ''
-    
+
+def sort_file_list(file_list):
+    is_numeral = True
+    for file in file_list:
+        if not file.isnumeric():
+            is_numeral = False
+            break;
+    if not is_numeral:
+        file_list.sort()
+        return file_list
+        
+    file_list = [int(file) for file in file_list]
+    file_list.sort()
+    return [ str(file) for file in file_list]
 
 def main(argv):
     check(argv)
@@ -67,19 +84,24 @@ def main(argv):
 
     file_list = get_dir_file_names(path)
     img_path = get_img_path(path, file_list)
+    generate_mp4 = False
     
     # READ ART IMAGE
     if img_path!='':
-        print('would you like to generate mp4 file? yes(y)/no(N)')
-        generate_mp4 = input()
-        generate_mp4 = generate_mp4 == 'y'
+        # print('would you like to generate mp4 file? yes(y)/no(N)')
+        # generate_mp4 = input()
+        # generate_mp4 = generate_mp4 == 'y'
+        generate_mp4 = False
         
         with open(img_path, 'rb',) as cover_art:
             artwork = cover_art.read()
     
     count = 0
+    file_list = sort_file_list(file_list)
     for file in file_list:
-        if file.endswith('.png'):
+        if file.endswith('.png') or file.endswith('.pdf'):
+            continue
+        if file.startswith('.'):
             continue
         
         file_full_path = path+'/'+file
@@ -88,7 +110,8 @@ def main(argv):
 
         print(file + ' | ' + str(int(count/len(file_list)*100)))
 
-        os.system("say -v " + voice + " -r " + speed +
+        # os.system("say -v " + voice + "--progress -r " + str(speed*175) +
+        os.system("say -r " + str(speed*175) +
                   " -o " + file_aiff + "  < " + file_full_path)
         os.system("lame -m m " + file_aiff + " " + file_mp3)
         os.system("rm " + file_aiff)
@@ -103,11 +126,8 @@ def main(argv):
         
         # ADD LYRICS
         # with open(file_full_path, 'r', encoding="utf8") as file:
-
         with open(file_full_path, 'rb') as f:
             lyrics = f.read().decode(errors='replace')
-
-
         audio.tag.lyrics.set(str(lyrics))
         
         # ADD ART IMAGE
@@ -118,11 +138,8 @@ def main(argv):
         if generate_mp4:
             os.system("ffmpeg -loop 1 -i "+ img_path +" -i "+ file_mp3 +" -c:v libx264 -tune stillimage -c:a aac -b:a 192k -pix_fmt yuv420p -shortest "+path + '/' + file + ".mp4")
 
-            
         audio.tag.save()
-
         count += 1
-
 
 if __name__ == "__main__":
     main(sys.argv)

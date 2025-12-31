@@ -1,0 +1,49 @@
+# Audio settings
+audio:
+  voice: "Alex"  # macOS voice name
+  speed: 1.0     # Speech speed (0.5 - 2.0)
+  format: "mp3"  # Output format: mp3, m4b, aiff
+  quality: "high"  # Quality: low, medium, high
+  bitrate: 192   # Audio bitrate in kbps
+
+# Text processing settings
+processing:
+  detect_chapters: true
+  clean_text: true
+  remove_page_numbers: true
+  remove_headers_footers: true
+  normalize_whitespace: true
+  fix_hyphenation: true
+  lines_per_chunk: 50
+
+# Output settings
+output:
+  separate_chapters: false
+  add_metadata: true
+  cleanup_intermediate: true
+  create_m4b: false
+
+# Database settings
+database:
+  path: "audiobooks.db"
+  echo: false  # SQL logging
+
+# Logging settings
+logging:
+  level: "INFO"  # DEBUG, INFO, WARNING, ERROR
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: null  # Set to path for file logging
+
+# Chapter detection patterns
+chapter_patterns:
+  - "^Chapter\\s+\\d+"
+  - "^Chapter\\s+[IVXLCDM]+"
+  - "^\\d+\\.\\s+"
+  - "^Part\\s+\\d+"
+  - "^CHAPTER\\s+\\d+"
+
+# Performance settings
+performance:
+  max_workers: 4  # Parallel processing threads
+  timeout_seconds: 300  # Audio generation timeout
+  max_retries: 3  # Retry attempts on failure
