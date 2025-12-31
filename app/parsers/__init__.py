@@ -8,6 +8,9 @@ from typing import Dict, Type, Optional
 
 from .base_parser import BaseParser, ParsedDocument, ParsedChapter
 from .text_parser import TextParser
+from .pdf_parser import PDFParser
+from .markdown_parser import MarkdownParser
+from .epub_parser import EpubParser
 
 # Registry of supported parsers
 _PARSER_REGISTRY: Dict[str, Type[BaseParser]] = {}
@@ -28,7 +31,9 @@ def register_parser(extension: str, parser_class: Type[BaseParser]) -> None:
 
 # Auto-register default parsers
 register_parser('.txt', TextParser)
-register_parser('.md', TextParser)
+register_parser('.md', MarkdownParser)
+register_parser('.epub', EpubParser)
+register_parser('.pdf', PDFParser)
 
 
 def get_parser(file_path: str | Path) -> BaseParser:
