@@ -17,8 +17,17 @@ class StructureDetector:
          self.chapter_patterns = [
              r'^chapter\s+[\dIVX]+',
              r'^chapter\s+\w+$',
-             r'^\d+\.\s+\w+',
+             # r'^\d+\.\s+\w+',  # Too permissive, matches list items
              r'^[IVX]+\.\s+\w+',
+             # Loose patterns for "1", "I", "One" etc if on own line
+             r'^(?:chapter|part|book|section)\s+[\dIVX]+.*$',
+             r'^(?:chapter|part|book|section)\s+\w+$',
+             # Roman numerals or simple numbers on their own line? Risk of false positives, 
+             # but often used in fiction.
+             r'^[IVX]+$', 
+             r'^\d+$', 
+             # Named sections
+             r'^(?:prologue|epilogue|preface|introduction|foreword|acknowledgments)$',
          ]
 
     def split_into_chapters(self, text: str) -> List[ParsedChapter]:
@@ -86,6 +95,16 @@ class StructureDetector:
         """Check if a line looks like a chapter header."""
         if not line:
             return False
+
+        # Constraint 1: Titles shouldn't be too long
+        if len(line) > 80:
+            return False
+
+        # Constraint 2: Titles usually don't end in periods (unless just a number)
+        # But some might "1. Intro."
+        # If it ends in period and looks like a sentence (space in it), likely not a header.
+        if line.endswith('.') and ' ' in line and len(line) > 10:
+             return False
             
         # Check explicit patterns
         for pattern in self.chapter_patterns:

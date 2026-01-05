@@ -21,7 +21,7 @@ class AudioPipeline:
     Manages temporary files, chunking, and stage transitions.
     """
 
-    def __init__(self, output_dir: Path, voice: str = "Alex", speed: float = 1.0, format: str = "mp3"):
+    def __init__(self, output_dir: Path, voice: Optional[str]=None, speed: float = 1.0, format: str = "mp3"):
         self.output_dir = output_dir
         self.output_dir.mkdir(parents=True, exist_ok=True)
         self.format = format.lower()

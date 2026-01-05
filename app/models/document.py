@@ -3,7 +3,7 @@
 from datetime import datetime
 from typing import List, Optional
 
-from sqlalchemy import String, DateTime, Enum as SqlEnum
+from sqlalchemy import String, DateTime, Enum as SqlEnum, Integer
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from .database import Base
@@ -26,6 +26,7 @@ class Document(Base):
     author: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     source_file: Mapped[str] = mapped_column(String(1024))  # Path to source file
     format: Mapped[str] = mapped_column(String(10))  # pdf, epub, txt, md
+    content_length: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
     
     # Status tracking
     status: Mapped[str] = mapped_column(String(20), default="pending", index=True)

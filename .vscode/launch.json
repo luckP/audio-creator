@@ -9,12 +9,17 @@
             "console": "integratedTerminal"
         },
         {
-            "name": "Debug: PDF Conversion (bataille)",
+            "name": "Debug: PDF Conversion (AI_Engineering)",
             "type": "debugpy",
             "request": "launch",
             "program": "main.py",
             "args": [
-                "bataille_story_of_eye.pdf"
+                "examples/AI_Engineering.pdf",
+                "--clean-text",
+                "--detect-chapters",
+                "--generate-audio",
+                "--output-dir",
+                "AI_Engineering"
             ],
             "console": "integratedTerminal",
             "justMyCode": false
